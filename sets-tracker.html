@@ -301,5 +301,68 @@
     });
   }
 </script>
+<script>
+  // pull-to-refresh manual — iOS desabilita o nativo em PWA standalone.
+  (function(){
+    const standalone = navigator.standalone === true ||
+                       matchMedia("(display-mode: standalone)").matches;
+    if (!standalone) return;
+
+    const THRESHOLD = 70, MAX = 120;
+    let startY = 0, dist = 0, pulling = false, firing = false;
+
+    const bar = document.createElement("div");
+    bar.setAttribute("aria-hidden", "true");
+    bar.style.cssText =
+      "position:fixed;top:0;left:0;right:0;height:0;overflow:hidden;" +
+      "display:flex;align-items:flex-end;justify-content:center;" +
+      "pointer-events:none;z-index:9999;" +
+      "background:linear-gradient(180deg,rgba(255,138,31,.18),transparent);" +
+      "font-family:'JetBrains Mono',monospace;font-size:11px;" +
+      "color:#ff8a1f;letter-spacing:.1em;text-transform:uppercase;" +
+      "padding-top:env(safe-area-inset-top);";
+    const lbl = document.createElement("span");
+    lbl.textContent = "↓ atualizar";
+    lbl.style.cssText = "padding-bottom:10px";
+    bar.appendChild(lbl);
+    document.body.appendChild(bar);
+
+    function setH(h, animate){
+      bar.style.transition = animate ? "height .18s ease-out" : "none";
+      bar.style.height = h + "px";
+    }
+
+    addEventListener("touchstart", (e) => {
+      if (firing) return;
+      if (window.scrollY > 0) { pulling = false; return; }
+      startY = e.touches[0].clientY;
+      dist = 0;
+      pulling = true;
+    }, { passive: true });
+
+    addEventListener("touchmove", (e) => {
+      if (!pulling || firing) return;
+      if (window.scrollY > 0) { pulling = false; setH(0, true); return; }
+      dist = Math.max(0, e.touches[0].clientY - startY);
+      const h = Math.min(dist * 0.5, MAX);
+      setH(h, false);
+      lbl.textContent = h >= THRESHOLD ? "↻ solta pra atualizar" : "↓ atualizar";
+    }, { passive: true });
+
+    addEventListener("touchend", () => {
+      if (!pulling || firing) return;
+      const trigger = dist * 0.5 >= THRESHOLD;
+      pulling = false;
+      if (trigger) {
+        firing = true;
+        lbl.textContent = "↻ atualizando…";
+        setH(44, true);
+        setTimeout(() => location.reload(), 140);
+      } else {
+        setH(0, true);
+      }
+    }, { passive: true });
+  })();
+</script>
 </body>
 </html>
