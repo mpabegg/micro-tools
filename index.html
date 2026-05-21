@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Ferramentas</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tools">
+<meta name="theme-color" content="#0c0a09">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230c0a09'/%3E%3Ctext x='90' y='124' font-family='Arial Black,Arial' font-size='86' font-weight='900' fill='%23ff8a1f' text-anchor='middle'%3E%E2%9A%92%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0a09; --panel:#17130f; --panel-2:#1f1813; --line:#332921;
+    --amber:#ff8a1f; --push:#46c0c8; --legs:#e0584b; --ink:#f3e7d6; --muted:#9c8b76;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:radial-gradient(120% 70% at 50% -10%, rgba(255,138,31,.10), transparent 60%), var(--bg);
+    color:var(--ink); font-family:"Barlow Condensed",system-ui,sans-serif;
+    min-height:100%; display:flex; justify-content:center;
+    padding:calc(34px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom));
+  }
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.04;
+    background-image:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+  .wrap{width:100%;max-width:520px}
+
+  .head{margin-bottom:6px}
+  h1{font-family:"Anton",sans-serif;font-weight:400;font-size:clamp(40px,12vw,60px);
+     line-height:.9;text-transform:uppercase;letter-spacing:.01em}
+  h1 span{color:var(--amber)}
+  .sub{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--muted);
+       letter-spacing:.06em;margin-top:10px}
+
+  .grid{display:flex;flex-direction:column;gap:12px;margin-top:26px}
+  a.tool{
+    text-decoration:none;color:inherit;position:relative;display:flex;align-items:center;gap:16px;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));
+    padding:18px 18px 18px 22px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+    transition:transform .06s, border-color .18s, background .18s;
+  }
+  a.tool:active{transform:scale(.985)}
+  a.tool:hover{border-color:var(--amber)}
+  .accent{position:absolute;left:0;top:0;bottom:0;width:4px}
+  .ic{font-family:"Anton";font-size:30px;width:46px;height:46px;flex:0 0 46px;
+      display:flex;align-items:center;justify-content:center;border-radius:11px;
+      background:var(--bg);border:1px solid var(--line)}
+  .meta{flex:1;min-width:0}
+  .tname{font-weight:600;font-size:21px;text-transform:uppercase;letter-spacing:.05em}
+  .tdesc{font-size:15px;color:var(--muted);line-height:1.35;margin-top:3px}
+  .arrow{font-family:"JetBrains Mono";font-size:22px;color:var(--muted)}
+
+  .tool[data-c=amber] .accent{background:var(--amber)} .tool[data-c=amber] .ic{color:var(--amber)}
+  .tool[data-c=push]  .accent{background:var(--push)}  .tool[data-c=push] .ic{color:var(--push)}
+  .tool[data-c=legs]  .accent{background:var(--legs)}  .tool[data-c=legs] .ic{color:var(--legs)}
+
+  .add{
+    display:flex;align-items:center;gap:14px;border:1px dashed var(--line);border-radius:14px;
+    padding:16px 22px;color:var(--muted);font-size:14px;font-family:"JetBrains Mono";letter-spacing:.04em
+  }
+  .add .ic{border-style:dashed;color:var(--muted);font-family:"JetBrains Mono";font-size:24px}
+
+  footer{margin-top:30px;font-family:"JetBrains Mono";font-size:11px;color:var(--muted);
+         line-height:1.6;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>MICRO<br><span>FERRAMENTAS</span></h1>
+    <div class="sub">caixa de ferramentas pessoal · cada peça, um arquivo</div>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <!-- ===== TOOL CARD TEMPLATE — copie um bloco destes pra adicionar uma ferramenta =====
+    <a class="tool" data-c="amber" href="ARQUIVO.html">
+      <div class="accent"></div>
+      <div class="ic">◆</div>
+      <div class="meta"><div class="tname">NOME</div><div class="tdesc">descrição curta</div></div>
+      <div class="arrow">→</div>
+    </a>
+    ============================================================================ -->
+
+    <a class="tool" data-c="amber" href="sets-tracker.html">
+      <div class="accent"></div>
+      <div class="ic">∑</div>
+      <div class="meta">
+        <div class="tname">Sets</div>
+        <div class="tdesc">Pull / push / legs por semana · média de sets ao longo do tempo</div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+
+    <a class="tool" data-c="legs" href="riff-trainer.html">
+      <div class="accent"></div>
+      <div class="ic">♪</div>
+      <div class="meta">
+        <div class="tname">Riff Trainer</div>
+        <div class="tdesc">Loop + tempo sorteado · célula vs. emenda · contador de reps limpas</div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+
+    <div class="add">
+      <div class="ic">+</div>
+      <div>próxima ferramenta: novo .html no repo + um card aqui</div>
+    </div>
+
+  </div>
+
+  <footer>
+    Hospedado no GitHub Pages · cada ferramenta guarda os dados localmente (localStorage)<br>
+    nesta origem. Mantenha chaves de storage únicas por ferramenta pra não colidir.
+  </footer>
+</div>
+</body>
+</html>

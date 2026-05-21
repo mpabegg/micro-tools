@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<title>Sets</title>
+<!-- iOS home-screen / standalone -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sets">
+<meta name="theme-color" content="#0c0a09">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230c0a09'/%3E%3Ctext x='90' y='122' font-family='Arial Black,Arial' font-size='90' font-weight='900' fill='%23ff8a1f' text-anchor='middle'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0c0a09; --panel:#17130f; --panel-2:#1f1813; --line:#332921;
+    --amber:#ff8a1f; --ink:#f3e7d6; --muted:#9c8b76;
+    --pull:#ff8a1f; --push:#46c0c8; --legs:#e0584b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    background:radial-gradient(120% 70% at 50% -10%, rgba(255,138,31,.10), transparent 60%), var(--bg);
+    color:var(--ink); font-family:"Barlow Condensed",system-ui,sans-serif;
+    min-height:100%; display:flex; justify-content:center;
+    padding:calc(16px + env(safe-area-inset-top)) 14px calc(28px + env(safe-area-inset-bottom));
+    user-select:none; -webkit-user-select:none;
+  }
+  .wrap{width:100%;max-width:480px}
+
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  h1{font-family:"Anton",sans-serif;font-weight:400;font-size:38px;letter-spacing:.02em;text-transform:uppercase}
+  h1 span{color:var(--amber)}
+  .wknav{display:flex;align-items:center;gap:4px}
+  .wknav button{font-family:"JetBrains Mono";font-size:20px;font-weight:700;color:var(--muted);
+    background:none;border:none;padding:6px 10px;cursor:pointer}
+  .wklabel{font-family:"JetBrains Mono";font-size:12px;color:var(--muted);min-width:96px;text-align:center;line-height:1.2}
+  .wklabel b{display:block;color:var(--ink);font-size:13px}
+
+  .cards{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+  .card{
+    position:relative;border:1px solid var(--line);border-radius:14px;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));
+    padding:16px 18px;display:flex;align-items:center;justify-content:space-between;
+    cursor:pointer;overflow:hidden;transition:transform .05s,border-color .15s;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+  }
+  .card:active{transform:scale(.985)}
+  .card .accent{position:absolute;left:0;top:0;bottom:0;width:4px}
+  .card .name{font-weight:600;font-size:22px;text-transform:uppercase;letter-spacing:.06em}
+  .card .sub{font-family:"JetBrains Mono";font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:2px}
+  .card .right{display:flex;align-items:center;gap:14px}
+  .card .count{font-family:"JetBrains Mono";font-weight:800;font-size:42px;line-height:1;min-width:56px;text-align:right}
+  .plus{font-family:"JetBrains Mono";font-weight:800;font-size:20px;color:#1a0f04;
+    width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .minus{position:absolute;right:12px;bottom:8px;font-family:"JetBrains Mono";font-size:13px;color:var(--muted);
+    border:1px solid var(--line);background:var(--bg);border-radius:7px;padding:3px 9px;cursor:pointer}
+  .card[data-c=pull] .accent{background:var(--pull)} .card[data-c=pull] .plus{background:var(--pull)}
+  .card[data-c=push] .accent{background:var(--push)} .card[data-c=push] .plus{background:var(--push)}
+  .card[data-c=legs] .accent{background:var(--legs)} .card[data-c=legs] .plus{background:var(--legs)}
+
+  .wksum{text-align:center;font-family:"JetBrains Mono";font-size:12px;color:var(--muted);margin:2px 0 16px}
+  .wksum b{color:var(--ink)}
+
+  .panel{border:1px solid var(--line);border-radius:14px;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));padding:18px;margin-bottom:12px}
+  .lbl{font-family:"JetBrains Mono";font-size:11px;letter-spacing:.18em;color:var(--muted);
+    text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .lbl::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .avg{text-align:center}
+  .avg .big{font-family:"JetBrains Mono";font-weight:800;font-size:64px;line-height:1;color:var(--amber);
+    text-shadow:0 0 24px rgba(255,138,31,.3)}
+  .avg .unit{font-size:13px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase}
+  .avg .cap{font-size:14px;color:var(--muted);margin-top:8px}
+  .breakdown{display:flex;gap:8px;margin-top:16px}
+  .bd{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:10px;text-align:center}
+  .bd .v{font-family:"JetBrains Mono";font-weight:700;font-size:24px}
+  .bd .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+  .bd[data-c=pull] .v{color:var(--pull)} .bd[data-c=push] .v{color:var(--push)} .bd[data-c=legs] .v{color:var(--legs)}
+
+  .bars{display:flex;align-items:flex-end;gap:5px;height:90px;margin-top:4px}
+  .bar{flex:1;background:var(--line);border-radius:4px 4px 0 0;min-height:3px;position:relative;transition:height .2s}
+  .bar.cur{background:var(--amber)}
+  .barwrap{display:flex;flex-direction:column;align-items:center;flex:1;gap:5px}
+  .bartick{font-family:"JetBrains Mono";font-size:9px;color:var(--muted)}
+  .empty{font-family:"Barlow Condensed";color:var(--muted);font-size:15px;text-align:center;padding:14px 0}
+
+  details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--panel)}
+  summary{font-family:"JetBrains Mono";font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;cursor:pointer}
+  .data-row{display:flex;gap:8px;margin-top:12px}
+  .data-row button{flex:1;font-family:"Barlow Condensed";font-weight:600;text-transform:uppercase;letter-spacing:.04em;
+    font-size:14px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);border-radius:9px;padding:10px;cursor:pointer}
+  .data-row button.danger{color:var(--legs);border-color:#5a2a25}
+  textarea{width:100%;margin-top:10px;background:var(--bg);border:1px solid var(--line);color:var(--ink);
+    border-radius:9px;padding:10px;font-family:"JetBrains Mono";font-size:11px;height:70px;resize:vertical}
+  .hint{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>∑ <span>SETS</span></h1>
+    <div class="wknav">
+      <button id="prev">‹</button>
+      <div class="wklabel" id="wklabel"></div>
+      <button id="next">›</button>
+    </div>
+  </header>
+
+  <div class="cards" id="cards">
+    <div class="card" data-c="pull">
+      <div class="accent"></div>
+      <div><div class="name">Pull</div><div class="sub">costas · bíceps</div></div>
+      <div class="right"><div class="count" id="c-pull">0</div><div class="plus">+</div></div>
+      <div class="minus" data-m="pull">−1</div>
+    </div>
+    <div class="card" data-c="push">
+      <div class="accent"></div>
+      <div><div class="name">Push</div><div class="sub">peito · ombro · tríceps</div></div>
+      <div class="right"><div class="count" id="c-push">0</div><div class="plus">+</div></div>
+      <div class="minus" data-m="push">−1</div>
+    </div>
+    <div class="card" data-c="legs">
+      <div class="accent"></div>
+      <div><div class="name">Legs</div><div class="sub">pernas · core</div></div>
+      <div class="right"><div class="count" id="c-legs">0</div><div class="plus">+</div></div>
+      <div class="minus" data-m="legs">−1</div>
+    </div>
+  </div>
+
+  <div class="wksum" id="wksum"></div>
+
+  <div class="panel avg">
+    <div class="lbl">média por semana</div>
+    <div class="big" id="avgBig">—</div>
+    <div class="unit">sets / semana</div>
+    <div class="cap" id="avgCap">comece a registrar</div>
+    <div class="breakdown">
+      <div class="bd" data-c="pull"><div class="v" id="a-pull">—</div><div class="k">pull</div></div>
+      <div class="bd" data-c="push"><div class="v" id="a-push">—</div><div class="k">push</div></div>
+      <div class="bd" data-c="legs"><div class="v" id="a-legs">—</div><div class="k">legs</div></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="lbl">tendência · total por semana</div>
+    <div id="trend"></div>
+  </div>
+
+  <details>
+    <summary>dados / backup</summary>
+    <div class="data-row">
+      <button id="exportBtn">Exportar</button>
+      <button id="importBtn">Importar</button>
+      <button id="resetBtn" class="danger">Zerar</button>
+    </div>
+    <textarea id="io" placeholder="cole o backup aqui pra importar / exportar copia pra cá"></textarea>
+    <div class="hint">O backup é um texto JSON. Os dados ficam só neste aparelho (localStorage) — exporte de vez em quando se quiser garantir.</div>
+  </details>
+</div>
+
+<script>
+(() => {
+  const KEY = "sets_tracker_v1";
+  const CATS = ["pull","push","legs"];
+  let offset = 0; // weeks from current
+
+  // ---- storage with safe fallback (works as file/URL; degrades in sandboxed preview) ----
+  let mem = {};
+  function load(){
+    try{ const raw = localStorage.getItem(KEY); mem = raw ? JSON.parse(raw) : {}; }
+    catch(e){ /* keep mem */ }
+    return mem;
+  }
+  function save(){
+    try{ localStorage.setItem(KEY, JSON.stringify(mem)); }catch(e){}
+  }
+
+  // ---- ISO week helpers ----
+  function mondayOf(date){
+    const d = new Date(date); const day = (d.getDay()+6)%7;
+    d.setDate(d.getDate()-day); d.setHours(0,0,0,0); return d;
+  }
+  function isoKey(date){
+    const d = new Date(Date.UTC(date.getFullYear(),date.getMonth(),date.getDate()));
+    const day=(d.getUTCDay()+6)%7; d.setUTCDate(d.getUTCDate()-day+3);
+    const firstThu=new Date(Date.UTC(d.getUTCFullYear(),0,4));
+    const wk=1+Math.round(((d-firstThu)/864e5 - 3 + ((firstThu.getUTCDay()+6)%7))/7);
+    return d.getUTCFullYear()+"-W"+String(wk).padStart(2,"0");
+  }
+  function dateForOffset(off){ const m=mondayOf(new Date()); m.setDate(m.getDate()+off*7); return m; }
+  function fmt(d){ return String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0"); }
+
+  const data = load();
+
+  function week(off){
+    const k = isoKey(dateForOffset(off));
+    return data[k] || {pull:0,push:0,legs:0};
+  }
+  function setWeek(off, w){
+    const k = isoKey(dateForOffset(off));
+    if(w.pull+w.push+w.legs <= 0) delete data[k];
+    else data[k] = w;
+    save();
+  }
+
+  function bump(cat, delta){
+    const w = {...week(offset)};
+    w[cat] = Math.max(0, (w[cat]||0)+delta);
+    setWeek(offset, w);
+    render();
+  }
+
+  // ---- stats ----
+  function stats(){
+    const keys = Object.keys(data);
+    const n = keys.length;
+    const sum = {pull:0,push:0,legs:0,total:0};
+    keys.forEach(k=>{ const w=data[k]; sum.pull+=w.pull; sum.push+=w.push; sum.legs+=w.legs; sum.total+=w.pull+w.push+w.legs; });
+    return { n, sum,
+      avgTotal: n? sum.total/n : 0,
+      avgPull: n? sum.pull/n : 0, avgPush: n? sum.push/n : 0, avgLegs: n? sum.legs/n : 0 };
+  }
+  const r1 = x => (Math.round(x*10)/10).toString();
+
+  // ---- render ----
+  function render(){
+    const w = week(offset);
+    CATS.forEach(c => document.getElementById("c-"+c).textContent = w[c]);
+    const wt = w.pull+w.push+w.legs;
+
+    // week label
+    const mon = dateForOffset(offset), sun = new Date(mon); sun.setDate(sun.getDate()+6);
+    const tag = offset===0 ? "esta semana" : (offset===-1 ? "semana passada" : isoKey(mon));
+    document.getElementById("wklabel").innerHTML = "<b>"+fmt(mon)+"–"+fmt(sun)+"</b>"+tag;
+    document.getElementById("next").style.visibility = offset>=0 ? "hidden":"visible";
+    document.getElementById("wksum").innerHTML = "total da semana: <b>"+wt+"</b> sets";
+
+    // averages
+    const s = stats();
+    document.getElementById("avgBig").textContent = s.n? r1(s.avgTotal) : "—";
+    document.getElementById("a-pull").textContent = s.n? r1(s.avgPull):"—";
+    document.getElementById("a-push").textContent = s.n? r1(s.avgPush):"—";
+    document.getElementById("a-legs").textContent = s.n? r1(s.avgLegs):"—";
+    document.getElementById("avgCap").textContent = s.n
+      ? (s.n+" semana"+(s.n>1?"s":"")+" registrada"+(s.n>1?"s":"")+" · uma fraca mexe pouco")
+      : "comece a registrar";
+
+    // trend (last 12 weeks up to current real week)
+    const trend = document.getElementById("trend");
+    const weeks = [];
+    for(let i=11;i>=0;i--){ const k=isoKey(dateForOffset(-i));
+      const wk=data[k]||{pull:0,push:0,legs:0}; weeks.push({k, off:-i, total:wk.pull+wk.push+wk.legs, mon:dateForOffset(-i)}); }
+    const max = Math.max(1, ...weeks.map(x=>x.total));
+    if(stats().n===0){ trend.innerHTML = '<div class="empty">sem dados ainda — toque num card pra começar</div>'; }
+    else{
+      trend.innerHTML = '<div class="bars">'+weeks.map(x=>{
+        const h = Math.round((x.total/max)*100);
+        return '<div class="barwrap"><div class="bar '+(x.off===offset?'cur':'')+'" style="height:'+h+'%" title="'+x.total+' sets"></div>'+
+               '<div class="bartick">'+fmt(x.mon)+'</div></div>';
+      }).join("")+'</div>';
+    }
+  }
+
+  // ---- events ----
+  document.getElementById("cards").addEventListener("click", e=>{
+    const minus = e.target.closest(".minus");
+    if(minus){ e.stopPropagation(); bump(minus.dataset.m, -1); return; }
+    const card = e.target.closest(".card");
+    if(card){ bump(card.dataset.c, +1); }
+  });
+  document.getElementById("prev").onclick = ()=>{ offset--; render(); };
+  document.getElementById("next").onclick = ()=>{ if(offset<0){offset++; render();} };
+
+  // data tools
+  const io = document.getElementById("io");
+  document.getElementById("exportBtn").onclick = ()=>{ io.value = JSON.stringify(data); io.select(); };
+  document.getElementById("importBtn").onclick = ()=>{
+    try{ const obj = JSON.parse(io.value);
+      Object.keys(data).forEach(k=>delete data[k]); Object.assign(data, obj);
+      save(); render(); io.value="importado ✓";
+    }catch(e){ io.value="JSON inválido"; }
+  };
+  document.getElementById("resetBtn").onclick = ()=>{
+    if(confirm("Apagar todos os dados?")){ Object.keys(data).forEach(k=>delete data[k]); save(); render(); }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
