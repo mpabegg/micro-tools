@@ -30,7 +30,11 @@ Aplica-se a tudo: `<link>`, `<script>`, `<a href>`, `fetch()`, registro do servi
 
 ## Arquivo intocável
 
-**`manual-de-estrategias.md` é pessoal.** Não edite, não leia para gerar respostas, não referencie no código, não inclua em caches do SW, não cite. Trate como se não existisse.
+**`manual-de-estrategias.md` é pessoal e canônico.** Não edite, não leia para gerar respostas, não referencie no código, não inclua em caches do SW, não parseie nem cite. Trate como se não existisse. O `index.html` contém um bloco estático de lembrete de estratégia ("O Método" / "Quando Travar") com texto inline — é cópia manual curada, não derivada do manual.
+
+## Ferramentas removidas
+
+- `riff-trainer.html` — removido. Não recrie sem pedido explícito; não inclua em precache do SW.
 
 ## Fluxo ao adicionar uma ferramenta
 
