@@ -6,7 +6,7 @@
 //   1. inclua o caminho em APP_SHELL abaixo
 //   2. suba a versão do CACHE para forçar refresh nos clientes
 
-const CACHE = "tools-v2";
+const CACHE = "tools-v3";
 
 const APP_SHELL = [
   "./",

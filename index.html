@@ -71,6 +71,31 @@
 
   footer{margin-top:30px;font-family:"JetBrains Mono";font-size:11px;color:var(--muted);
          line-height:1.6;border-top:1px solid var(--line);padding-top:16px}
+
+  .strat{margin-top:28px;display:flex;flex-direction:column;gap:12px}
+  .strat-card{
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));
+    padding:18px 20px;position:relative;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+  }
+  .strat-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--amber)}
+  .strat-card.emerg::before{background:var(--legs)}
+  .strat-title{
+    font-family:"Anton",sans-serif;font-weight:400;font-size:22px;
+    text-transform:uppercase;letter-spacing:.05em;color:var(--amber);
+  }
+  .strat-card.emerg .strat-title{color:var(--legs)}
+  .strat-sub{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--muted);
+             letter-spacing:.06em;margin-top:4px;text-transform:uppercase}
+  .strat-list{margin-top:12px;padding-left:0;list-style:none;
+              font-family:"Barlow Condensed",system-ui,sans-serif;font-size:17px;line-height:1.45}
+  .strat-list li{display:flex;gap:10px;padding:4px 0}
+  .strat-list li::before{content:counter(strat) ".";counter-increment:strat;
+    font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--amber);
+    flex:0 0 auto;padding-top:2px}
+  .strat-card.emerg .strat-list li::before{color:var(--legs)}
+  .strat-list{counter-reset:strat}
 </style>
 </head>
 <body>
@@ -107,6 +132,32 @@
     </div>
 
   </div>
+
+  <section class="strat" aria-label="Lembrete de estratégia">
+    <div class="strat-card">
+      <div class="strat-title">O Método</div>
+      <div class="strat-sub">o gerador · rode em qualquer meta nova</div>
+      <ol class="strat-list">
+        <li>Qual é o método padrão — e que capacidade ele assume calado?</li>
+        <li>Onde isso bate de frente comigo?</li>
+        <li>Qual o ponto de quebra aqui: começar, manter ou recuperar?</li>
+        <li>Redesenho passando por uma força + encolho a energia de ativação.</li>
+        <li>Pré-comprometo a regra de recuperação e meço presença/tendência, não a tentativa.</li>
+      </ol>
+    </div>
+
+    <div class="strat-card emerg">
+      <div class="strat-title">Quando Travar</div>
+      <div class="strat-sub">cartão de emergência</div>
+      <ol class="strat-list">
+        <li>Qual é o ponto de quebra agora — começar, manter ou recuperar?</li>
+        <li>Encolhe o pedaço até ficar ridículo de pequeno.</li>
+        <li>Não falhar duas vezes. Volta leve.</li>
+        <li>Mede que apareci. Não julgo a tentativa.</li>
+        <li>Loop de recomeço? Não recomeço do topo — encolho.</li>
+      </ol>
+    </div>
+  </section>
 
   <footer>
     Hospedado no GitHub Pages · cada ferramenta guarda os dados localmente (localStorage)<br>
