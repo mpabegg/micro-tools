@@ -6,13 +6,12 @@
 //   1. inclua o caminho em APP_SHELL abaixo
 //   2. suba a versão do CACHE para forçar refresh nos clientes
 
-const CACHE = "tools-v1";
+const CACHE = "tools-v2";
 
 const APP_SHELL = [
   "./",
   "./index.html",
   "./sets-tracker.html",
-  "./riff-trainer.html",
   "./manifest.json",
   "./icon.svg",
   "./icon-maskable.svg",

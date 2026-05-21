@@ -8,7 +8,6 @@ Caixa de ferramentas web pessoais. Cada ferramenta é **um único arquivo `.html
 .
 ├── index.html            # capa/hub — linka todas as ferramentas
 ├── sets-tracker.html     # tracker de sets de treino (localStorage: sets_tracker_v1)
-├── riff-trainer.html     # metrônomo/trainer de riff (sem persistência)
 ├── manifest.json         # PWA manifest (caminhos relativos)
 ├── sw.js                 # service worker (app-shell cache-first)
 ├── icon.svg              # ícone do PWA
